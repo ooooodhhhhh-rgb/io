@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이콘 생성 도구</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .preview-area {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        .preview-item {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #3a3a3a;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .size-label {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background: #4169e1;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 10px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #5179f1;
+            transform: scale(1.05);
+        }
+
+        .instructions {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        .instructions h2 {
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin: 10px 0;
+        }
+
+        #svgInput {
+            display: none;
+        }
+
+        .upload-btn {
+            background: #2d8659;
+        }
+
+        .upload-btn:hover {
+            background: #3d9669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 마세라티 아이콘 생성 도구</h1>
+        
+        <input type="file" id="svgInput" accept=".svg" onchange="loadSVG(event)">
+        <button class="upload-btn" onclick="document.getElementById('svgInput').click()">
+            SVG 파일 선택
+        </button>
+
+        <div class="preview-area">
+            <div class="preview-item">
+                <div class="size-label">180x180 (iPad)</div>
+                <canvas id="canvas180" width="180" height="180"></canvas>
+                <button onclick="downloadIcon(180)">다운로드</button>
+            </div>
+            <div class="preview-item">
+                <div class="size-label">192x192 (Android)</div>
+                <canvas id="canvas192" width="192" height="192"></canvas>
+                <button onclick="downloadIcon(192)">다운로드</button>
+            </div>
+            <div class="preview-item">
+                <div class="size-label">512x512 (고해상도)</div>
+                <canvas id="canvas512" width="512" height="512"></canvas>
+                <button onclick="downloadIcon(512)">다운로드</button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>📋 사용 방법</h2>
+            <ol>
+                <li><strong>SVG 파일 선택</strong> 버튼을 클릭하여 trident_mobile_white.svg 파일을 선택합니다.</li>
+                <li>자동으로 3가지 크기의 PNG 아이콘이 생성됩니다.</li>
+                <li>각 아이콘의 <strong>다운로드</strong> 버튼을 클릭하여 저장합니다:
+                    <ul>
+                        <li>icon-180.png (iPad 홈화면용)</li>
+                        <li>icon-192.png (Android용)</li>
+                        <li>icon-512.png (고해상도용)</li>
+                    </ul>
+                </li>
+                <li>다운로드한 PNG 파일들을 <code>img/</code> 폴더에 넣습니다.</li>
+                <li>GitHub에 모든 파일을 업로드합니다.</li>
+            </ol>
+            
+            <h2 style="margin-top: 30px;">📱 아이패드에서 홈화면 추가</h2>
+            <ol>
+                <li>Safari에서 퀴즈 페이지를 엽니다.</li>
+                <li>공유 버튼(위쪽 화살표)을 탭합니다.</li>
+                <li><strong>"홈 화면에 추가"</strong>를 선택합니다.</li>
+                <li>이름을 확인하고 <strong>"추가"</strong>를 탭합니다.</li>
+                <li>홈화면에 마세라티 로고 아이콘이 나타납니다! 🎉</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let svgData = null;
+
+        function loadSVG(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                svgData = e.target.result;
+                generateIcons();
+            };
+            reader.readAsText(file);
+        }
+
+        function generateIcons() {
+            if (!svgData) return;
+
+            // SVG를 이미지로 변환
+            const img = new Image();
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+
+            img.onload = function() {
+                // 각 크기별로 캔버스에 그리기
+                [180, 192, 512].forEach(size => {
+                    const canvas = document.getElementById(`canvas${size}`);
+                    const ctx = canvas.getContext('2d');
+                    
+                    // 검정 배경 (중요!)
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, size, size);
+                    
+                    // 로고를 중앙에 배치 (패딩 적용)
+                    const padding = size * 0.15;
+                    const logoSize = size - (padding * 2);
+                    const x = (size - logoSize) / 2;
+                    const y = (size - logoSize) / 2;
+                    
+                    ctx.drawImage(img, x, y, logoSize, logoSize);
+                });
+
+                URL.revokeObjectURL(url);
+                alert('아이콘 생성 완료! 각 다운로드 버튼을 눌러주세요.');
+            };
+
+            img.onerror = function() {
+                alert('SVG 파일을 불러오는데 실패했습니다.');
+                URL.revokeObjectURL(url);
+            };
+
+            img.src = url;
+        }
+
+        function downloadIcon(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            if (!canvas || canvas.width === 0) {
+                alert('먼저 SVG 파일을 선택해주세요!');
+                return;
+            }
+            
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                console.log(`icon-${size}.png 다운로드 완료`);
+            });
+        }
+    </script>
+</body>
+</html>
