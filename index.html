@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>MASERATI QUIZ - LA CASA DI MASERATI</title>
     
     <!-- PWA 설정 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="MASERATI QUIZ">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#F2F4F7">
     
     <!-- 홈화면 아이콘 -->
     <link rel="apple-touch-icon" href="img/trident_mobile_white.svg">
@@ -775,14 +775,14 @@
             }
         }
     
-        /* 🔥 STATUS BAR ICON DARK MODE (Bright Safe-Area Trick) */
+        /* 🔥 STATUS BAR ICON DARK (v2) — Force light area behind status bar */
         .statusbar-light {
             position: fixed;
             left: 0;
             right: 0;
             top: 0;
-            height: env(safe-area-inset-top);
-            background: rgba(255,255,255,0.92);
+            height: calc(env(safe-area-inset-top) + 40px);
+            background: #F2F4F7; /* solid light */
             pointer-events: none;
             z-index: 9999;
         }
