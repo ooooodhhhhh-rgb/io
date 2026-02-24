@@ -2,14 +2,12 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>MASERATI QUIZ - LA CASA DI MASERATI</title>
     
     <!-- PWA 설정 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="MASERATI QUIZ">
     <meta name="theme-color" content="#000000">
     
@@ -41,14 +39,8 @@
         }
 
         html, body {
-            margin: 0;
-            
             width: 100%;
             height: 100%;
-        
-            min-height: 100dvh;
-        
-            overflow-x: hidden;
         }
         
         /* 가로 모드에서만 overflow hidden */
@@ -58,12 +50,13 @@
             }
         }
 
-        body {font-family: 'NotoSansKR', 'GothicBI', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #000000;
-            min-height: 100dvh;
-            
-            
-            
+        body {
+            font-family: 'NotoSansKR', 'GothicBI', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a1e3d;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             color: white;
         }
         
@@ -91,7 +84,7 @@
 
         .container {
             width: 100vw;
-            height: 100dvh;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -103,53 +96,26 @@
                 overflow: hidden;
                 position: fixed;
                 top: 0;
-                left: 0;
+                left: 200;
             }
         }
 
         /* 시작 화면 */
         .start-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 5;
-
             text-align: center;
-            padding: calc(80px + env(safe-area-inset-top)) 60px 80px 60px;
+            padding: 80px 60px;
             width: 100%;
             height: 100%;
-
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-
-            background-image: url('img/Image/Q0_MaseratiMCPURACielo.jpg');
-            background-size: cover;
+            background-image: url('img/Image/Q0_MaseratiMCPURACielo.jpg');      background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
 
-        
-
-        /* 🔥 상태바 존재감 제거용 상단 마스크 (START 화면) */
-        .start-screen::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: calc(env(safe-area-inset-top) + 120px);
-            background: linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.95) 0%,
-                rgba(0,0,0,0.85) 40%,
-                rgba(0,0,0,0.55) 70%,
-                rgba(0,0,0,0) 100%
-            );
-            pointer-events: none;
-            z-index: 6;
-        }
-.logo-container {
+        .logo-container {
             margin-top: -180px;
             margin-bottom: 300px;
         }
@@ -163,6 +129,7 @@
 
         .brand-name {
             font-size: 16px;
+            letter-spacing: 4px;
             margin-bottom: 15px;
             opacity: 0.9;
             font-weight: 300;
@@ -170,6 +137,7 @@
 
         .title {
             font-size: 24px;
+            letter-spacing: 3px;
             margin-bottom: 0;
             font-weight: 300;
             opacity: 0.95;
@@ -190,6 +158,7 @@
             border-radius: 40px;
             font-size: 25px;
             cursor: pointer;
+            letter-spacing: 3px;
             transition: all 0.4s ease;
             text-transform: uppercase;
             font-weight: 300;
@@ -204,37 +173,13 @@
 
         /* 퀴즈 화면 */
         .quiz-screen {
-            position: fixed;
-            inset: 0;
-            padding-top: env(safe-area-inset-top);
-
             display: none;
             background: #0a1e3d;
             width: 100vw;
-            height: 100dvh;
+            height: 100vh;
         }
         
-        
-
-        /* 🔥 상태바 존재감 제거용 상단 마스크 (QUIZ/RESULT 화면) */
-        .quiz-screen::before,
-        .complete-screen::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: calc(env(safe-area-inset-top) + 80px);
-            background: linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.55) 0%,
-                rgba(0,0,0,0.30) 55%,
-                rgba(0,0,0,0) 100%
-            );
-            pointer-events: none;
-            z-index: 6;
-        }
-/* 가로 모드에서만 overflow hidden */
+        /* 가로 모드에서만 overflow hidden */
         @media (orientation: landscape) {
             .quiz-screen {
                 overflow: hidden;
@@ -248,14 +193,14 @@
         @media (orientation: portrait) {
             .quiz-screen {
                 height: auto;
-                min-height: 100dvh;
+                min-height: 100vh;
                 overflow-y: auto;
             }
         }
 
         .quiz-header {
             position: absolute;
-            top: calc(50px + env(safe-area-inset-top));
+            top: 50px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -272,6 +217,7 @@
             font-family: 'GothicBI', 'NotoSansKR', sans-serif;
             font-size: 16px;
             margin-bottom: 3px;
+            letter-spacing: 4px;
             font-style: italic;
             font-weight: 400;
         }
@@ -280,17 +226,18 @@
             font-family: 'GothicBI', 'NotoSansKR', sans-serif;
             font-size: 36px;
             margin-bottom: 0;
+            letter-spacing: 4px;
             font-weight: 300;
         }
 
         .quiz-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            height: 100dvh;
+            height: 100vh;
             width: 100vw;
             gap: 0;
             overflow: hidden;
-            padding-top: calc(80px + env(safe-area-inset-top));
+            padding-top: 80px;
         }
 
         .quiz-item {
@@ -298,7 +245,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100dvh;
+            height: 100vh;
             overflow: hidden;
         }
 
@@ -326,7 +273,7 @@
             justify-content: center;
             align-items: flex-start;
             padding: 100px 80px 80px 80px;
-            height: 100dvh;
+            height: 100vh;
             overflow: hidden;
         }
 
@@ -366,6 +313,7 @@
             border-radius: 50px;
             font-size: 18px;
             cursor: pointer;
+            letter-spacing: 4px;
             transition: all 0.3s ease;
             text-align: center;
             font-weight: 300;
@@ -555,7 +503,7 @@
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto;
                 height: auto;
-                min-height: 100dvh;
+                min-height: 100vh;
                 overflow-y: auto;
             }
             
@@ -681,10 +629,6 @@
 
         /* 완료 화면 */
         .complete-screen {
-            position: fixed;
-            inset: 0;
-            padding-top: env(safe-area-inset-top);
-
             display: none;
             text-align: center;
             padding: 40px 60px;
@@ -755,6 +699,7 @@
             border-radius: 40px;
             font-size: 15px;
             cursor: pointer;
+            letter-spacing: 2px;
             transition: all 0.4s ease;
             text-transform: uppercase;
             font-weight: 300;
@@ -776,7 +721,7 @@
             .quiz-container {
                 grid-template-columns: 1fr;
                 height: auto;
-                min-height: 100dvh;
+                min-height: 100vh;
             }
 
             .quiz-left {
@@ -802,6 +747,7 @@
         @media (max-width: 768px) {
             .main-title {
                 font-size: 36px;
+                letter-spacing: 4px;
             }
 
             .quiz-item {
@@ -826,9 +772,23 @@
                 font-size: 18px;
             }
         }
-    </style>
+    
+        /* 🔥 STATUS BAR HIDE MASK (60px version) */
+        .top-mask {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: calc(env(safe-area-inset-top) + 60px);
+            background: rgba(0,0,0,0.98);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+</style>
 </head>
 <body>
+    <div class="top-mask"></div>
     <div class="container">
         <!-- 시작 화면 -->
         <div class="start-screen" id="startScreen">
