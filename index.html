@@ -2,6 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>MASERATI QUIZ - LA CASA DI MASERATI</title>
     
@@ -773,14 +775,14 @@
             }
         }
     
-        /* 🔥 STATUS BAR HIDE MASK (60px version) */
-        .top-mask {
+        /* 🔥 STATUS BAR ICON DARK MODE (Bright Safe-Area Trick) */
+        .statusbar-light {
             position: fixed;
             left: 0;
             right: 0;
             top: 0;
-            height: calc(env(safe-area-inset-top) + 60px);
-            background: rgba(0,0,0,0.98);
+            height: env(safe-area-inset-top);
+            background: rgba(255,255,255,0.92);
             pointer-events: none;
             z-index: 9999;
         }
@@ -788,7 +790,7 @@
 </style>
 </head>
 <body>
-    <div class="top-mask"></div>
+    <div class="statusbar-light"></div>
     <div class="container">
         <!-- 시작 화면 -->
         <div class="start-screen" id="startScreen">
